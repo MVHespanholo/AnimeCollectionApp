@@ -14,7 +14,7 @@ class DashboardScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/anime_collection.png',
+              'lib/assets/images/anime_collection.png',
               height: 200,
             ),
             SizedBox(height: 30),
@@ -34,7 +34,7 @@ class DashboardScreen extends StatelessWidget {
               icon: Icon(Icons.collections_bookmark),
               label: Text('Ver Minha Coleção'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.deepPurple,
+                backgroundColor: Colors.deepPurple,
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
               onPressed: () {

@@ -1,5 +1,4 @@
 // lib/screens/add_anime_screen.dart
-
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import '../models/anime.dart';
@@ -46,7 +45,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // Campo de título
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Título do Anime',
@@ -63,8 +61,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _title = value!,
               ),
               SizedBox(height: 16),
-
-              // Campo de gênero
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Gênero',
@@ -81,13 +77,11 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _genre = value!,
               ),
               SizedBox(height: 16),
-
-              // Campo de episódios
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Número de Episódios',
                   hintText: 'Ex: 24',
-                  prefixIcon: Icon(Icons.queue_play_next),
+                  prefixIcon: Icon(Icons.tv),
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
@@ -103,13 +97,11 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _episodes = int.parse(value!),
               ),
               SizedBox(height: 16),
-
-              // Campo de status
               DropdownButtonFormField<String>(
                 value: _status,
                 decoration: InputDecoration(
                   labelText: 'Status',
-                  prefixIcon: Icon(Icons.status),
+                  prefixIcon: Icon(Icons.watch_later),
                   border: OutlineInputBorder(),
                 ),
                 items: _statusOptions.map((String status) {
@@ -125,8 +117,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 },
               ),
               SizedBox(height: 16),
-
-              // Campo de avaliação
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Avaliação (0-10)',
@@ -148,8 +138,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _rating = double.parse(value!),
               ),
               SizedBox(height: 16),
-
-              // Campo de URL da imagem
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'URL da Imagem',
@@ -169,13 +157,11 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _imageUrl = value!,
               ),
               SizedBox(height: 16),
-
-              // Campo de estúdio
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Estúdio',
                   hintText: 'Ex: Studio Ghibli',
-                  prefixIcon: Icon(Icons.movie_creation),
+                  prefixIcon: Icon(Icons.movie),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -187,8 +173,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _studio = value!,
               ),
               SizedBox(height: 16),
-
-              // Campo de descrição
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Descrição',
@@ -206,11 +190,9 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 onSaved: (value) => _description = value!,
               ),
               SizedBox(height: 24),
-
-              // Botão de salvar
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.deepPurple,
+                  backgroundColor: Colors.deepPurple,
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
