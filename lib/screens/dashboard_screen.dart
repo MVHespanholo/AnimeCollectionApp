@@ -1,4 +1,3 @@
-// lib/screens/dashboard_screen.dart
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -13,10 +12,7 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'lib/assets/images/anime_collection.png',
-              height: 200,
-            ),
+            Image.asset('lib/assets/images/anime_collection.png'),
             SizedBox(height: 30),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -35,6 +31,7 @@ class DashboardScreen extends StatelessWidget {
               label: Text('Ver Minha Coleção'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.black,
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
               onPressed: () {

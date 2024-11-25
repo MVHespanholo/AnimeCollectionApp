@@ -1,8 +1,7 @@
-// lib/screens/anime_list_screen.dart
-
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import '../models/anime.dart';
+import 'edit_anime_screen.dart';
 
 class AnimeListScreen extends StatefulWidget {
   @override
@@ -203,8 +202,18 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                           children: [
                             TextButton(
                               child: Text('EDITAR'),
-                              onPressed: () {
-                                // TODO: Implementar edição
+                              onPressed: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditAnimeScreen(anime: anime),
+                                  ),
+                                );
+                                if (result == true) {
+                                  setState(
+                                      () {}); // Atualiza a lista após a edição
+                                }
                               },
                             ),
                             TextButton(

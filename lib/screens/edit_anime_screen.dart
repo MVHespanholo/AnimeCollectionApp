@@ -2,24 +2,27 @@ import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import '../models/anime.dart';
 
-class AddAnimeScreen extends StatefulWidget {
+class EditAnimeScreen extends StatefulWidget {
+  final Anime anime;
+
+  EditAnimeScreen({required this.anime});
+
   @override
-  _AddAnimeScreenState createState() => _AddAnimeScreenState();
+  _EditAnimeScreenState createState() => _EditAnimeScreenState();
 }
 
-class _AddAnimeScreenState extends State<AddAnimeScreen> {
+class _EditAnimeScreenState extends State<EditAnimeScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  String _title = '';
-  String _genre = '';
-  int _episodes = 0;
-  String _status = 'Em andamento';
-  double _rating = 0.0;
-  String _description = '';
-  String _imageUrl = '';
-  String _studio = '';
+  late TextEditingController _titleController;
+  late TextEditingController _genreController;
+  late TextEditingController _episodesController;
+  late TextEditingController _ratingController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _imageUrlController;
+  late TextEditingController _studioController;
+  late String _status;
 
   final List<String> _statusOptions = [
     'Em andamento',
@@ -30,11 +33,38 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.anime.title);
+    _genreController = TextEditingController(text: widget.anime.genre);
+    _episodesController =
+        TextEditingController(text: widget.anime.episodes.toString());
+    _ratingController =
+        TextEditingController(text: widget.anime.rating.toString());
+    _descriptionController =
+        TextEditingController(text: widget.anime.description);
+    _imageUrlController = TextEditingController(text: widget.anime.imageUrl);
+    _studioController = TextEditingController(text: widget.anime.studio);
+    _status = widget.anime.status;
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _genreController.dispose();
+    _episodesController.dispose();
+    _ratingController.dispose();
+    _descriptionController.dispose();
+    _imageUrlController.dispose();
+    _studioController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Adicionar Novo Anime'),
+        title: Text('Editar Anime'),
         backgroundColor: Colors.deepPurple,
       ),
       body: SingleChildScrollView(
@@ -45,6 +75,7 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
+                controller: _titleController,
                 decoration: InputDecoration(
                   labelText: 'Título do Anime',
                   hintText: 'Ex: Naruto',
@@ -57,10 +88,10 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _title = value!,
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _genreController,
                 decoration: InputDecoration(
                   labelText: 'Gênero',
                   hintText: 'Ex: Ação, Aventura',
@@ -73,10 +104,10 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _genre = value!,
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _episodesController,
                 decoration: InputDecoration(
                   labelText: 'Número de Episódios',
                   hintText: 'Ex: 24',
@@ -93,7 +124,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _episodes = int.parse(value!),
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -117,6 +147,7 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _ratingController,
                 decoration: InputDecoration(
                   labelText: 'Avaliação (0-10)',
                   hintText: 'Ex: 8.5',
@@ -134,10 +165,10 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _rating = double.parse(value!),
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _imageUrlController,
                 decoration: InputDecoration(
                   labelText: 'URL da Imagem',
                   hintText: 'Ex: https://exemplo.com/imagem.jpg',
@@ -153,10 +184,10 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _imageUrl = value!,
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _studioController,
                 decoration: InputDecoration(
                   labelText: 'Estúdio',
                   hintText: 'Ex: Studio Ghibli',
@@ -169,10 +200,10 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _studio = value!,
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _descriptionController,
                 decoration: InputDecoration(
                   labelText: 'Descrição',
                   hintText: 'Digite uma breve descrição do anime...',
@@ -186,7 +217,6 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _description = value!,
               ),
               SizedBox(height: 24),
               ElevatedButton(
@@ -200,34 +230,33 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-
-                    final anime = Anime(
-                      title: _title,
-                      genre: _genre,
-                      episodes: _episodes,
+                    final updatedAnime = Anime(
+                      id: widget.anime.id,
+                      title: _titleController.text,
+                      genre: _genreController.text,
+                      episodes: int.parse(_episodesController.text),
                       status: _status,
-                      rating: _rating,
-                      description: _description,
-                      imageUrl: _imageUrl,
-                      studio: _studio,
+                      rating: double.parse(_ratingController.text),
+                      description: _descriptionController.text,
+                      imageUrl: _imageUrlController.text,
+                      studio: _studioController.text,
                     );
 
                     try {
-                      await _databaseHelper.insertAnime(anime);
+                      await _databaseHelper.updateAnime(updatedAnime);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Anime cadastrado com sucesso!'),
+                          content: Text('Anime atualizado com sucesso!'),
                           backgroundColor: Colors.green,
                         ),
                       );
 
-                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Erro ao cadastrar anime: $e'),
+                          content: Text('Erro ao atualizar anime: $e'),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -235,7 +264,7 @@ class _AddAnimeScreenState extends State<AddAnimeScreen> {
                   }
                 },
                 child: Text(
-                  'SALVAR ANIME',
+                  'ATUALIZAR ANIME',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
